@@ -29,18 +29,21 @@ export const categories = [
         id: 1,
         img: "https://images.unsplash.com/photo-1608278047522-58806a6ac85b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80",
         title: "Toys",
+        cat: "toys"
     },
 
     {
         id: 1,
         img: "https://images.unsplash.com/photo-1565789787624-4caced7af971?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80",
         title: "Clothing",
+        cat: "Clothings"
     },
 
     {
         id: 1,
         img: "https://images.unsplash.com/photo-1659652676424-528bfdd60c8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80",
         title: "Mugs",
+        cat: "Mugs"
     }
 ]
 
