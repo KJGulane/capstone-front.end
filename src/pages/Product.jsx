@@ -6,9 +6,15 @@ import Footer from "../components/Footer";
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { mobile } from "../reponsive";
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import { publicRequest } from "../requestMethods";
+import { addProduct } from "../redux/cartRedux";
+import { useDispatch } from "react-redux";
 
 const Container = styled.div`
-   
+
 `;
 
 const Wrapper = styled.div`
@@ -49,7 +55,7 @@ const Price = styled.span`
 
 const FilterContainer = styled.div`
     width: 50%;
-    margin: 30px 0px; 
+    margin: 30px 0px;
     display: flex;
     justify-content:space-between;
     ${mobile({width: "100%"})}
@@ -121,48 +127,76 @@ const Button = styled.button`
 `;
 
 const Product = () => {
+    const location = useLocation();
+    const id = (location.pathname.split("/")[2])
+    const [product, setProduct] = useState({});
+    const [quantity, setQuantity] = useState(1);
+    const [color, setColor] = useState("");
+    const [size, setSize] = useState("");
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        const getProduct = async ()=>{
+            try{
+                const res = await publicRequest.get("/products/find/" + id);
+                setProduct(res.data)
+            }catch{}
+        };
+        getProduct()
+    },[id])
+
+    const handleQuantity = (type) => {
+        if(type === "dec") {
+            quantity > 1 && setQuantity(quantity - 1)
+        }else {
+            setQuantity(quantity + 1);
+        }   ;
+    };
+
+    const handleClick = () => {
+        dispatch(addProduct({ ...product, quantity, color, size}));
+        
+    };
+
   return (
     <Container>
         <Navbar/>
         <Announcement/>
         <Wrapper>
             <ImgContainer>
-                <Image src="https://cdn-ssl.s7.disneystore.com/is/image/DisneyShopping/5201048021202?fmt=webp&qlt=70&wid=1680&hei=1680"/>
+                <Image src={product.img}/>
             </ImgContainer>
             <InforContainer>
-                <Title>Starlord Mask</Title>
-                <Desc>Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
-                    Voluptas corporis adipisci aperiam sapiente doloremque, 
-                    placeat alias eius accusantium recusandae eos consectetur 
-                    eligendi reprehenderit ex molestiae quod! Iste, voluptas. Dignissimos, suscipit!
+                <Title>{product.title}</Title>
+                <Desc>
+                    {product.desc}
                 </Desc>
-                <Price>$ 20</Price>
+                <Price>$ {product.price}</Price>
                 <FilterContainer>
-                    <Filter>
+                <Filter>
                     <FilterTitle>Color</FilterTitle>
-                    <FilterColor color="black"/>
-                    <FilterColor color="blue"/>
-                    <FilterColor color="red"/>
-                    </Filter>
+                    {product.color?.map((c) => (
+                        <FilterColor color={c} key={c} onClick={()=>setColor(c)}/>
+                    ))}
+                </Filter>
 
-                    <Filter>
-                    <FilterTitle>Size</FilterTitle>
-                    <FilterSize>
-                        <FilterSizeOption>XS</FilterSizeOption>
-                        <FilterSizeOption>S</FilterSizeOption>
-                        <FilterSizeOption>M</FilterSizeOption>
-                        <FilterSizeOption>L</FilterSizeOption>
-                        <FilterSizeOption>XL</FilterSizeOption>
+                <Filter>
+                <FilterTitle>Size</FilterTitle>
+                    <FilterSize onChange={(e)=>setSize(e.target.value)}>
+                    {product.size?.map((s) => (
+                    <FilterSizeOption key={s}>{s}</FilterSizeOption>
+                    ))}
                     </FilterSize>
-                    </Filter>
+                </Filter>
+
                 </FilterContainer>
                 <AddContainer>
                     <AmountContainer>
-                        <RemoveCircleOutlineOutlinedIcon/>
-                        <Amount>1</Amount>
-                        <AddCircleOutlineOutlinedIcon/>
+                        <RemoveCircleOutlineOutlinedIcon onClick={() => handleQuantity("dec")}/>
+                        <Amount>{quantity}</Amount>
+                        <AddCircleOutlineOutlinedIcon onClick={() => handleQuantity("inc")}/>
                     </AmountContainer>
-                    <Button>ADD TO CART</Button>
+                    <Button onClick={handleClick}>ADD TO CART</Button>
                 </AddContainer>
             </InforContainer>
         </Wrapper>

@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import { mobile } from "../reponsive";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
 
@@ -165,6 +166,7 @@ const Button = styled.button`
 
 
 const Cart = () => {
+    const cart = useSelector(state=>state.cart)
   return (
     <Container>
         <Navbar/>
@@ -182,45 +184,28 @@ const Cart = () => {
             </Top>
             <Bottom>
                 <Info>
+                {cart.products.map(product=>(
                     <Product>
                         <ProductDetail>
-                            <Image src="https://cdn-ssl.s7.disneystore.com/is/image/DisneyShopping/5205048028720?fmt=webp&qlt=70&wid=1280&hei=1280"/>
+                            <Image src= {product.img}/>
                             <Details>
-                                <ProductName><b>Prodcut:</b>Guardians of the Galaxy Shirt</ProductName>
-                                <ProductId><b>ID:</b>954648164</ProductId>
-                                <ProductColor color="maroon" />
-                                <ProductSize><b>Size:</b>M</ProductSize>
+                                <ProductName><b>Prodcut:</b >{product.title} </ProductName>
+                                <ProductId><b>ID:</b>{product._id} </ProductId>
+                                <ProductColor color={product.color} />
+                                <ProductSize><b>Size:</b> {product.size} </ProductSize>
                             </Details>
                         </ProductDetail>
                         <PriceDetail>
                             <ProductAmountContainer>
                                 <AddIcon/>
-                                <ProductAmount>5</ProductAmount>
+                                <ProductAmount> {product.quantity} </ProductAmount>
                                 <RemoveIcon/>
                             </ProductAmountContainer>
-                            <ProductPrice>$ 20</ProductPrice>
+                            <ProductPrice>$ {product.price} </ProductPrice>
                         </PriceDetail>
                     </Product>
+                    ))}
                     <Hr/>
-                    <Product>
-                        <ProductDetail>
-                            <Image src="https://cdn-ssl.s7.disneystore.com/is/image/DisneyShopping/5106048028718?fmt=webp&qlt=70&wid=1280&hei=1280"/>
-                            <Details>
-                                <ProductName><b>Prodcut:</b>Guardians of the Galaxy Shirt</ProductName>
-                                <ProductId><b>ID:</b>954648164</ProductId>
-                                <ProductColor color="blue" />
-                                <ProductSize><b>Size:</b>M</ProductSize>
-                            </Details>
-                        </ProductDetail>
-                        <PriceDetail>
-                            <ProductAmountContainer>
-                                <AddIcon/>
-                                <ProductAmount>5</ProductAmount>
-                                <RemoveIcon/>
-                            </ProductAmountContainer>
-                            <ProductPrice>$ 20</ProductPrice>
-                        </PriceDetail>
-                    </Product>
                 </Info>
                 <Summary>
                     <SummaryTitle>ORDER SUMMARY</SummaryTitle>
